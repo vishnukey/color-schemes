@@ -1,0 +1,43 @@
+body{
+    margin:40px auto;
+    max-width:650px;
+    line-height:1.6;
+    font-size:18px;
+
+    /* color: #bbb; */
+    /* background-color: #fff; */
+
+    /* color: hsl(60,60%,80%); */
+    /* background-color: hsl(0,0%,15%); */
+
+    /* background-color: hsl(60,60%,80%);
+    color: hsl(0,0%,15%); */
+
+    padding:0 10px;
+}
+
+h1,h2,h3{
+    line-height:1.2;
+}
+
+#color-scheme-buttons{
+    position: fixed;
+    display: flex;
+    top: 0;
+    bottom: 0;
+}
+
+.color-scheme-button{
+    position: relative;
+    width: 60px;
+    height: 25px;
+    margin: 5px;
+    border-radius: 1;
+    border-style: solid;
+    border-color: black;
+    background-color: aqua;
+}
+
+.color-scheme-button[data-active="true"]{
+    background-color: red;
+}
