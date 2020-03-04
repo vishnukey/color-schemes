@@ -1,42 +1,46 @@
-const Colours = Object.freeze({
-    yellow:"hsl(60,60%,80%)", //#444
+const Namespace = Object.freeze
+const Record = Object.freeze
+const ImmutableObject = Object.freeze
+
+const Colours = Namespace({
+    yellow: "hsl(60,60%,80%)", //#444
     darkGrey: "hsl(0,0%,15%)",
     lightGrey: "#bbb", 
     black: "#000",
     white: "#fff",
 })
 
-const ColorSchemes = Object.freeze({
-    "blackOnYellow":{
+const ColorSchemes = Namespace({
+    "blackOnYellow":Record({
         backgroundColor: Colours.yellow,
         color: Colours.darkGrey,
-    },
-    "yellowOnBlack":{
+    }),
+    "yellowOnBlack":Record({
         backgroundColor: Colours.darkGrey,
         color: Colours.yellow,
-    },
-    "darkOnLight":{
+    }),
+    "darkOnLight":Record({
         backgroundColor: Colours.darkGrey, 
         color: Colours.lightGrey,
-    },
-    "lightOnDark":{
+    }),
+    "lightOnDark":Record({
         backgroundColor: Colours.lightGrey,
         color: Colours.darkGrey, 
-    },
-    "blackOnWhite":{
+    }),
+    "blackOnWhite":Record({
         backgroundColor: Colours.white,
         color: Colours.black,
-    },
-    "whiteOnBlack":{
+    }),
+    "whiteOnBlack":Record({
         backgroundColor: Colours.black,
         color: Colours.white,
-    },
+    }),
 })
 
-const buttons = document.querySelectorAll(".color-scheme-button");
+const buttons = document.querySelectorAll(".color-scheme-button")
 const buttonArray = Array.from(buttons)
 
-const Effect = f => (...args) => Object.freeze({
+const Effect = f => (...args) => ImmutableObject({
     runEffect: () => f(...args),
 })
 
@@ -74,10 +78,10 @@ const activate = activateButton(buttonArray)
 
 buttonArray
     .map(button => button.dataset)
-    .filter(dataset => dataset.default != undefined)
+    .filter(dataset => dataset.default !== undefined)
     .forEach(df => df.active = true)
 
-buttonArray.forEach(btn => btn.addEventListener('click', e => {
+buttonArray.forEach(btn => btn.addEventListener('click', _ => {
     const scheme = btn.dataset.colorScheme
     runEffects([
         deactivateAll(buttonArray),
