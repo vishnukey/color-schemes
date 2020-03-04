@@ -10,28 +10,36 @@ const Colours = Namespace({
     white: "#fff",
 })
 
+const nameToColorScheme = colours => name => {
+    const [fg, bg] = name.split("On")
+    return Record({
+        backgroundColor: colours[bg],
+        color: colours[fg],
+    })
+}
+
 const ColorSchemes = Namespace({
-    "blackOnYellow":Record({
+    "darkGreyOnyellow":Record({
         backgroundColor: Colours.yellow,
         color: Colours.darkGrey,
     }),
-    "yellowOnBlack":Record({
+    "yellowOndarkGrey":Record({
         backgroundColor: Colours.darkGrey,
         color: Colours.yellow,
     }),
-    "darkOnLight":Record({
+    "lightGreytOndarkGrey":Record({
         backgroundColor: Colours.darkGrey, 
         color: Colours.lightGrey,
     }),
-    "lightOnDark":Record({
+    "darkGreyOnlightGrey":Record({
         backgroundColor: Colours.lightGrey,
         color: Colours.darkGrey, 
     }),
-    "blackOnWhite":Record({
+    "blackOnwhite":Record({
         backgroundColor: Colours.white,
         color: Colours.black,
     }),
-    "whiteOnBlack":Record({
+    "whiteOnblack":Record({
         backgroundColor: Colours.black,
         color: Colours.white,
     }),
@@ -57,21 +65,23 @@ const activateButton = btns => Effect(scheme =>
         .filter(ds => ds.colorScheme === scheme)
         .forEach(ds => ds.active = true))
 
-const applyNewStyleTo = schemes => Effect(btns => {
+const applyNewStyleWith = schemes => Effect(btns => {
     const [scheme, ..._] = btns
         .map(btn => btn.dataset)
         .filter(ds => ds.active === "true")
         .map(ds => ds.colorScheme)
 
     const body = document.querySelector("body")
-    const deltaStyle = schemes[scheme]
-    
+    const deltaStyle = schemes(scheme)
+
     for (const key in deltaStyle){
         body.style[key] = deltaStyle[key]
     }
 })
 
-const update = applyNewStyleTo(ColorSchemes)
+//const lookupColor = name => ColorSchemes[name]
+const lookupColor = nameToColorScheme(Colours)
+const update = applyNewStyleWith(lookupColor)
 const activate = activateButton(buttonArray)
 
 // Initialize state of everything
