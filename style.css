@@ -17,7 +17,8 @@ h1,h2,h3{
     bottom: 0;
 }
 
-.color-scheme-button{
+/*.color-scheme-button{*/
+color-scheme {
     position: relative;
     width: 60px;
     height: 25px;
@@ -28,6 +29,7 @@ h1,h2,h3{
     background-color: aqua;
 }
 
-.color-scheme-button[data-active="true"]{
+/*.color-scheme-button[data-active="true"]{*/
+color-scheme[data-active="true"] {
     background-color: red;
 }

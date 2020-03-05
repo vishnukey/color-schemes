@@ -2,13 +2,15 @@ const Namespace = Object.freeze
 const Record = Object.freeze
 const ImmutableObject = Object.freeze
 
-const Colours = Namespace({
-    yellow: "hsl(60,60%,80%)", //#444
-    darkGrey: "hsl(0,0%,15%)",
-    lightGrey: "#bbb", 
-    black: "#000",
-    white: "#fff",
-})
+const parsePallette = pallette => Object.freeze(Object.assign(
+    ...Array.from(pallette.querySelectorAll("named-color"))
+        .map(nc => nc.dataset)
+        .map(ds => {
+            const obj = {}
+            obj[ds.name] = ds.color
+            return obj
+        })
+))
 
 const nameToColorScheme = colours => name => {
     const [fg, bg] = name.split("On")
@@ -17,36 +19,6 @@ const nameToColorScheme = colours => name => {
         color: colours[fg],
     })
 }
-
-const ColorSchemes = Namespace({
-    "darkGreyOnyellow":Record({
-        backgroundColor: Colours.yellow,
-        color: Colours.darkGrey,
-    }),
-    "yellowOndarkGrey":Record({
-        backgroundColor: Colours.darkGrey,
-        color: Colours.yellow,
-    }),
-    "lightGreytOndarkGrey":Record({
-        backgroundColor: Colours.darkGrey, 
-        color: Colours.lightGrey,
-    }),
-    "darkGreyOnlightGrey":Record({
-        backgroundColor: Colours.lightGrey,
-        color: Colours.darkGrey, 
-    }),
-    "blackOnwhite":Record({
-        backgroundColor: Colours.white,
-        color: Colours.black,
-    }),
-    "whiteOnblack":Record({
-        backgroundColor: Colours.black,
-        color: Colours.white,
-    }),
-})
-
-const buttons = document.querySelectorAll(".color-scheme-button")
-const buttonArray = Array.from(buttons)
 
 const Effect = f => (...args) => ImmutableObject({
     runEffect: () => f(...args),
@@ -79,10 +51,24 @@ const applyNewStyleWith = schemes => Effect(btns => {
     }
 })
 
-//const lookupColor = name => ColorSchemes[name]
+const blankElement = () => class extends HTMLElement{
+    constructor(){
+        super()
+    }
+}
+
+const buttons = document.querySelectorAll("color-scheme")
+const pallette = document.querySelector("color-pallette")
+
+const buttonArray = Array.from(buttons)
+const Colours = parsePallette(pallette)
 const lookupColor = nameToColorScheme(Colours)
 const update = applyNewStyleWith(lookupColor)
 const activate = activateButton(buttonArray)
+
+window.customElements.define("color-scheme", blankElement()) // maybe uneeded
+window.customElements.define("color-pallette", blankElement())
+window.customElements.define("named-color", blankElement())
 
 // Initialize state of everything
 
